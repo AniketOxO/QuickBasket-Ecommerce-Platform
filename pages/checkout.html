@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - QuickBasket</title>
+    <meta name="description" content="Complete your order securely with QuickBasket. Fast checkout with multiple payment options.">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .checkout-page {
+            background: var(--background-light);
+            min-height: 100vh;
+            padding: 40px 0;
+        }
+        
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .checkout-main {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .checkout-sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+        
+        .checkout-step {
+            border-bottom: 1px solid var(--border-color);
+            padding: 30px;
+        }
+        
+        .checkout-step:last-child {
+            border-bottom: none;
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .step-number {
+            width: 35px;
+            height: 35px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .step-number.completed {
+            background: var(--success-color);
+        }
+        
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+        
+        .form-input.error {
+            border-color: var(--error-color);
+        }
+        
+        .form-error {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-error.show {
+            display: block;
+        }
+        
+        .address-options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .address-option {
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .address-option:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .address-option.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+        
+        .address-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .address-type {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+        
+        .address-details {
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+        
+        .add-address-btn {
+            width: 100%;
+            background: var(--background-light);
+            border: 2px dashed var(--border-color);
+            color: var(--text-dark);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+        
+        .add-address-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .delivery-options {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .delivery-option {
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .delivery-option:hover,
+        .delivery-option.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+        
+        .delivery-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .delivery-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .delivery-details h4 {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+        
+        .delivery-details p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .delivery-price {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .payment-methods {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .payment-method {
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .payment-method:hover,
+        .payment-method.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+        
+        .payment-method input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .payment-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .payment-icon {
+            width: 50px;
+            height: 35px;
+            background: var(--background-light);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+        
+        .payment-details h4 {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+        
+        .payment-details p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .card-form {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            display: none;
+        }
+        
+        .card-form.show {
+            display: block;
+        }
+        
+        .order-summary {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+        }
+        
+        .order-items {
+            margin-bottom: 25px;
+        }
+        
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-image {
+            width: 50px;
+            height: 50px;
+            background: var(--background-light);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .item-details {
+            flex: 1;
+        }
+        
+        .item-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+        
+        .item-price {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .item-quantity {
+            background: var(--background-light);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .coupon-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--background-light);
+            border-radius: var(--border-radius);
+        }
+        
+        .coupon-form {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .coupon-input {
+            flex: 1;
+        }
+        
+        .applied-coupon {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: var(--success-color);
+            color: white;
+            border-radius: var(--border-radius);
+            margin-top: 10px;
+        }
+        
+        .applied-coupon.show {
+            display: flex;
+        }
+        
+        .remove-coupon {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        
+        .order-totals {
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .total-row.final {
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .place-order-btn {
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .place-order-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .place-order-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .security-info {
+            background: var(--background-light);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .breadcrumb {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-light);
+        }
+        
+        .breadcrumb a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 0 15px;
+            }
+            
+            .checkout-sidebar {
+                order: -1;
+                position: static;
+            }
+            
+            .checkout-step {
+                padding: 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .delivery-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .payment-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .checkout-page {
+                padding: 20px 0;
+            }
+            
+            .checkout-step {
+                padding: 15px;
+            }
+            
+            .order-summary {
+                padding: 20px;
+            }
+            
+            .coupon-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Simplified Header for Checkout -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-content">
+                    <div class="logo">
+                        <a href="../index.html">
+                            <i class="fas fa-shopping-basket"></i>
+                            <span>Quick<strong>Basket</strong></span>
+                        </a>
+                    </div>
+                    
+                    <div class="checkout-security">
+                        <i class="fas fa-lock"></i>
+                        <span>Secure Checkout</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="checkout-page">
+        <div class="checkout-container">
+            <!-- Checkout Main Content -->
+            <div class="checkout-main">
+                <!-- Breadcrumb -->
+                <div class="breadcrumb" style="padding: 20px 30px 0;">
+                    <a href="../index.html">Home</a>
+                    <span><i class="fas fa-chevron-right"></i></span>
+                    <a href="products.html">Cart</a>
+                    <span><i class="fas fa-chevron-right"></i></span>
+                    <span>Checkout</span>
+                </div>
+
+                <!-- Step 1: Delivery Address -->
+                <div class="checkout-step" id="address-step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h2 class="step-title">Delivery Address</h2>
+                    </div>
+                    
+                    <div class="address-options">
+                        <div class="address-option selected" onclick="selectAddress(this)">
+                            <input type="radio" name="address" value="home" checked>
+                            <div class="address-type">
+                                <i class="fas fa-home"></i>
+                                <span>Home</span>
+                            </div>
+                            <div class="address-details">
+                                123 Main Street, Apt 4B<br>
+                                New York, NY 10001<br>
+                                Phone: +1 (555) 123-4567
+                            </div>
+                        </div>
+                        
+                        <div class="address-option" onclick="selectAddress(this)">
+                            <input type="radio" name="address" value="office">
+                            <div class="address-type">
+                                <i class="fas fa-building"></i>
+                                <span>Office</span>
+                            </div>
+                            <div class="address-details">
+                                456 Business Avenue, Suite 200<br>
+                                New York, NY 10002<br>
+                                Phone: +1 (555) 987-6543
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="add-address-btn" onclick="addNewAddress()">
+                        <i class="fas fa-plus"></i>
+                        Add New Address
+                    </button>
+                </div>
+
+                <!-- Step 2: Delivery Options -->
+                <div class="checkout-step" id="delivery-step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h2 class="step-title">Delivery Options</h2>
+                    </div>
+                    
+                    <div class="delivery-options">
+                        <div class="delivery-option selected" onclick="selectDelivery(this)">
+                            <input type="radio" name="delivery" value="express" checked>
+                            <div class="delivery-info">
+                                <div class="delivery-details">
+                                    <h4>Express Delivery</h4>
+                                    <p>Get your order in 15-30 minutes</p>
+                                </div>
+                                <div class="delivery-price">$2.99</div>
+                            </div>
+                        </div>
+                        
+                        <div class="delivery-option" onclick="selectDelivery(this)">
+                            <input type="radio" name="delivery" value="standard">
+                            <div class="delivery-info">
+                                <div class="delivery-details">
+                                    <h4>Standard Delivery</h4>
+                                    <p>Get your order in 1-2 hours</p>
+                                </div>
+                                <div class="delivery-price">$1.99</div>
+                            </div>
+                        </div>
+                        
+                        <div class="delivery-option" onclick="selectDelivery(this)">
+                            <input type="radio" name="delivery" value="scheduled">
+                            <div class="delivery-info">
+                                <div class="delivery-details">
+                                    <h4>Scheduled Delivery</h4>
+                                    <p>Choose your preferred time slot</p>
+                                </div>
+                                <div class="delivery-price">$1.49</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Payment Method -->
+                <div class="checkout-step" id="payment-step">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h2 class="step-title">Payment Method</h2>
+                    </div>
+                    
+                    <div class="payment-methods">
+                        <div class="payment-method selected" onclick="selectPayment(this)">
+                            <input type="radio" name="payment" value="card" checked>
+                            <div class="payment-info">
+                                <div class="payment-icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="payment-details">
+                                    <h4>Credit/Debit Card</h4>
+                                    <p>Visa, MasterCard, American Express</p>
+                                </div>
+                            </div>
+                            <div class="card-form show">
+                                <div class="form-group">
+                                    <label class="form-label">Card Number</label>
+                                    <input type="text" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Expiry Date</label>
+                                        <input type="text" class="form-input" placeholder="MM/YY" maxlength="5">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">CVV</label>
+                                        <input type="text" class="form-input" placeholder="123" maxlength="4">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Cardholder Name</label>
+                                    <input type="text" class="form-input" placeholder="John Doe">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-method" onclick="selectPayment(this)">
+                            <input type="radio" name="payment" value="paypal">
+                            <div class="payment-info">
+                                <div class="payment-icon">
+                                    <i class="fab fa-paypal"></i>
+                                </div>
+                                <div class="payment-details">
+                                    <h4>PayPal</h4>
+                                    <p>Pay with your PayPal account</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-method" onclick="selectPayment(this)">
+                            <input type="radio" name="payment" value="apple-pay">
+                            <div class="payment-info">
+                                <div class="payment-icon">
+                                    <i class="fab fa-apple-pay"></i>
+                                </div>
+                                <div class="payment-details">
+                                    <h4>Apple Pay</h4>
+                                    <p>Touch ID or Face ID required</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-method" onclick="selectPayment(this)">
+                            <input type="radio" name="payment" value="cod">
+                            <div class="payment-info">
+                                <div class="payment-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div class="payment-details">
+                                    <h4>Cash on Delivery</h4>
+                                    <p>Pay when your order arrives</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary Sidebar -->
+            <div class="checkout-sidebar">
+                <div class="order-summary">
+                    <h3 class="summary-title">Order Summary</h3>
+                    
+                    <div class="order-items" id="checkout-items">
+                        <!-- Items will be loaded dynamically -->
+                    </div>
+                    
+                    <div class="coupon-section">
+                        <div class="coupon-form">
+                            <input type="text" class="form-input coupon-input" placeholder="Enter coupon code" id="coupon-input">
+                            <button class="btn btn-outline" onclick="applyCoupon()">Apply</button>
+                        </div>
+                        <div class="applied-coupon" id="applied-coupon">
+                            <span>WELCOME10 applied</span>
+                            <button class="remove-coupon" onclick="removeCoupon()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="order-totals">
+                        <div class="total-row">
+                            <span>Subtotal</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Delivery Fee</span>
+                            <span id="delivery-fee">$2.99</span>
+                        </div>
+                        <div class="total-row" id="discount-row" style="display: none;">
+                            <span>Discount</span>
+                            <span id="discount-amount">-$0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Tax</span>
+                            <span id="tax-amount">$0.00</span>
+                        </div>
+                        <div class="total-row final">
+                            <span>Total</span>
+                            <span id="final-total">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <button class="place-order-btn" onclick="placeOrder()">
+                        Place Order
+                    </button>
+                    
+                    <div class="security-info">
+                        <i class="fas fa-shield-alt"></i>
+                        Your payment information is secured with 256-bit SSL encryption
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notification-container"></div>
+
+    <!-- JavaScript Files -->
+    <script src="../js/products.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        // Checkout page functionality
+        let checkoutData = {};
+        let currentDeliveryFee = 2.99;
+        let currentDiscount = 0;
+        
+        // Initialize checkout page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCheckoutData();
+            calculateTotals();
+            
+            // Format card number input
+            const cardInput = document.querySelector('input[placeholder="1234 5678 9012 3456"]');
+            if (cardInput) {
+                cardInput.addEventListener('input', formatCardNumber);
+            }
+            
+            // Format expiry date input
+            const expiryInput = document.querySelector('input[placeholder="MM/YY"]');
+            if (expiryInput) {
+                expiryInput.addEventListener('input', formatExpiryDate);
+            }
+        });
+        
+        function loadCheckoutData() {
+            // Load cart data from localStorage
+            const savedCheckout = localStorage.getItem('quickbasket_checkout');
+            const savedCart = localStorage.getItem('quickbasket_cart');
+            
+            if (savedCheckout) {
+                checkoutData = JSON.parse(savedCheckout);
+            } else if (savedCart) {
+                const cartData = JSON.parse(savedCart);
+                checkoutData = {
+                    items: cartData,
+                    total: cartData.reduce((sum, item) => sum + (parseFloat(item.price.replace('$', '')) * item.quantity), 0),
+                    itemCount: cartData.reduce((count, item) => count + item.quantity, 0),
+                    timestamp: Date.now()
+                };
+            } else {
+                // Redirect to cart if no data
+                window.location.href = '../index.html';
+                return;
+            }
+            
+            displayCheckoutItems();
+        }
+        
+        function displayCheckoutItems() {
+            const container = document.getElementById('checkout-items');
+            if (!container || !checkoutData.items) return;
+            
+            if (checkoutData.items.length === 0) {
+                container.innerHTML = '<p>No items in cart</p>';
+                return;
+            }
+            
+            container.innerHTML = checkoutData.items.map(item => `
+                <div class="order-item">
+                    <div class="item-image">
+                        ${item.image && item.image.startsWith('fas') ? 
+                            `<i class="${item.image}"></i>` : 
+                            `<img src="${item.image || '../images/placeholder.png'}" alt="${item.name}">`
+                        }
+                    </div>
+                    <div class="item-details">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-price">${item.price} each</div>
+                    </div>
+                    <div class="item-quantity">×${item.quantity}</div>
+                </div>
+            `).join('');
+        }
+        
+        function selectAddress(element) {
+            // Remove selected class from all options
+            document.querySelectorAll('.address-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Check the radio button
+            const radio = element.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+            
+            // Mark step as completed
+            markStepCompleted('address-step');
+        }
+        
+        function selectDelivery(element) {
+            // Remove selected class from all options
+            document.querySelectorAll('.delivery-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Check the radio button
+            const radio = element.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+            
+            // Update delivery fee
+            const priceElement = element.querySelector('.delivery-price');
+            if (priceElement) {
+                currentDeliveryFee = parseFloat(priceElement.textContent.replace('$', ''));
+                calculateTotals();
+            }
+            
+            // Mark step as completed
+            markStepCompleted('delivery-step');
+        }
+        
+        function selectPayment(element) {
+            // Remove selected class from all options
+            document.querySelectorAll('.payment-method').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Check the radio button
+            const radio = element.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+            
+            // Hide all card forms
+            document.querySelectorAll('.card-form').forEach(form => {
+                form.classList.remove('show');
+            });
+            
+            // Show card form if card payment is selected
+            const cardForm = element.querySelector('.card-form');
+            if (cardForm) {
+                cardForm.classList.add('show');
+            }
+            
+            // Mark step as completed
+            markStepCompleted('payment-step');
+        }
+        
+        function markStepCompleted(stepId) {
+            const step = document.getElementById(stepId);
+            if (step) {
+                const stepNumber = step.querySelector('.step-number');
+                if (stepNumber) {
+                    stepNumber.classList.add('completed');
+                    stepNumber.innerHTML = '<i class="fas fa-check"></i>';
+                }
+            }
+        }
+        
+        function addNewAddress() {
+            // This would open a modal or form to add a new address
+            if (typeof cart !== 'undefined') {
+                cart.showNotification('Add new address feature coming soon!', 'info');
+            }
+        }
+        
+        function applyCoupon() {
+            const couponInput = document.getElementById('coupon-input');
+            const couponCode = couponInput.value.trim().toUpperCase();
+            
+            if (!couponCode) {
+                if (typeof cart !== 'undefined') {
+                    cart.showNotification('Please enter a coupon code', 'warning');
+                }
+                return;
+            }
+            
+            // Simulate coupon validation
+            const validCoupons = {
+                'WELCOME10': { type: 'percentage', value: 10, description: '10% off your order' },
+                'SAVE5': { type: 'fixed', value: 5, description: '$5 off your order' },
+                'FREESHIP': { type: 'shipping', value: 0, description: 'Free shipping' }
+            };
+            
+            const coupon = validCoupons[couponCode];
+            
+            if (coupon) {
+                appliedCoupon = coupon;
+                appliedCoupon.code = couponCode;
+                
+                // Show applied coupon
+                const appliedCouponElement = document.getElementById('applied-coupon');
+                if (appliedCouponElement) {
+                    appliedCouponElement.querySelector('span').textContent = `${couponCode} applied`;
+                    appliedCouponElement.classList.add('show');
+                }
+                
+                // Clear input
+                couponInput.value = '';
+                
+                // Recalculate totals
+                calculateTotals();
+                
+                if (typeof cart !== 'undefined') {
+                    cart.showNotification(`Coupon applied: ${coupon.description}`, 'success');
+                }
+            } else {
+                if (typeof cart !== 'undefined') {
+                    cart.showNotification('Invalid coupon code', 'error');
+                }
+            }
+        }
+        
+        function removeCoupon() {
+            appliedCoupon = null;
+            
+            // Hide applied coupon
+            const appliedCouponElement = document.getElementById('applied-coupon');
+            if (appliedCouponElement) {
+                appliedCouponElement.classList.remove('show');
+            }
+            
+            // Recalculate totals
+            calculateTotals();
+            
+            if (typeof cart !== 'undefined') {
+                cart.showNotification('Coupon removed', 'info');
+            }
+        }
+        
+        function calculateTotals() {
+            const subtotal = checkoutData.total || 0;
+            let discount = 0;
+            
+            // Calculate discount if coupon is applied
+            if (window.appliedCoupon) {
+                switch (window.appliedCoupon.type) {
+                    case 'percentage':
+                        discount = subtotal * (window.appliedCoupon.value / 100);
+                        break;
+                    case 'fixed':
+                        discount = Math.min(window.appliedCoupon.value, subtotal);
+                        break;
+                    case 'shipping':
+                        currentDeliveryFee = 0;
+                        break;
+                }
+            }
+            
+            const tax = (subtotal - discount) * 0.08; // 8% tax
+            const total = subtotal - discount + currentDeliveryFee + tax;
+            
+            // Update UI
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('delivery-fee').textContent = `$${currentDeliveryFee.toFixed(2)}`;
+            document.getElementById('tax-amount').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('final-total').textContent = `$${total.toFixed(2)}`;
+            
+            const discountRow = document.getElementById('discount-row');
+            const discountAmount = document.getElementById('discount-amount');
+            
+            if (discount > 0) {
+                discountRow.style.display = 'flex';
+                discountAmount.textContent = `-$${discount.toFixed(2)}`;
+            } else {
+                discountRow.style.display = 'none';
+            }
+        }
+        
+        function formatCardNumber(event) {
+            let value = event.target.value.replace(/\s/g, '');
+            let formattedValue = value.replace(/(.{4})/g, '$1 ').trim();
+            
+            if (formattedValue.length > 19) {
+                formattedValue = formattedValue.substring(0, 19);
+            }
+            
+            event.target.value = formattedValue;
+        }
+        
+        function formatExpiryDate(event) {
+            let value = event.target.value.replace(/\D/g, '');
+            
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            
+            event.target.value = value;
+        }
+        
+        function validateForm() {
+            // Basic form validation
+            const selectedAddress = document.querySelector('input[name="address"]:checked');
+            const selectedDelivery = document.querySelector('input[name="delivery"]:checked');
+            const selectedPayment = document.querySelector('input[name="payment"]:checked');
+            
+            if (!selectedAddress || !selectedDelivery || !selectedPayment) {
+                return false;
+            }
+            
+            // If card payment is selected, validate card form
+            if (selectedPayment.value === 'card') {
+                const cardInputs = document.querySelectorAll('.card-form.show input');
+                for (let input of cardInputs) {
+                    if (!input.value.trim()) {
+                        return false;
+                    }
+                }
+            }
+            
+            return true;
+        }
+        
+        function placeOrder() {
+            if (!validateForm()) {
+                if (typeof cart !== 'undefined') {
+                    cart.showNotification('Please complete all required fields', 'warning');
+                }
+                return;
+            }
+            
+            // Disable button and show loading
+            const placeOrderBtn = document.querySelector('.place-order-btn');
+            placeOrderBtn.disabled = true;
+            placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            
+            // Simulate order processing
+            setTimeout(() => {
+                try {
+                    // Read checkout data to build order record
+                    const checkoutRaw = localStorage.getItem('quickbasket_checkout');
+                    const checkoutData = checkoutRaw ? JSON.parse(checkoutRaw) : null;
+                    const orderId = 'QB' + Date.now().toString().slice(-8);
+                    const now = new Date().toISOString();
+                    const order = {
+                        id: orderId,
+                        createdAt: now,
+                        status: 'Processing',
+                        items: checkoutData?.items || [],
+                        subtotal: checkoutData?.total || 0,
+                        discount: (typeof cart !== 'undefined' && cart.getDiscount) ? cart.getDiscount() : 0,
+                        total: (typeof cart !== 'undefined' && cart.getFinalTotal) ? cart.getFinalTotal() : (checkoutData?.total || 0),
+                        delivery: document.querySelector('input[name="delivery"]:checked')?.value || 'standard',
+                        payment: document.querySelector('input[name="payment"]:checked')?.value || 'cod'
+                    };
+
+                    // Save to orders list
+                    const existing = JSON.parse(localStorage.getItem('quickbasket_orders') || '[]');
+                    existing.unshift(order);
+                    localStorage.setItem('quickbasket_orders', JSON.stringify(existing));
+
+                    // Clear cart
+                    localStorage.removeItem('quickbasket_cart');
+                    localStorage.removeItem('quickbasket_checkout');
+
+                    // Success message
+                    if (typeof cart !== 'undefined') {
+                        cart.showNotification('Order placed successfully!', 'success');
+                    }
+
+                    // Redirect to Track Order page with id
+                    setTimeout(() => {
+                        window.location.href = `track-order.html?id=${orderId}`;
+                    }, 1200);
+                } catch (e) {
+                    console.error('Failed to save order', e);
+                    if (typeof cart !== 'undefined') {
+                        cart.showNotification('Order saved locally, redirecting...', 'info');
+                    }
+                    setTimeout(() => {
+                        window.location.href = '../index.html';
+                    }, 1500);
+                }
+                
+            }, 3000);
+        }
+        
+        // Global variable for applied coupon
+        window.appliedCoupon = null;
+    </script>
+</body>
+</html>

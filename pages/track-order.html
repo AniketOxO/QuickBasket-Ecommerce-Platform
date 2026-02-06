@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Order - QuickBasket</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/wishlist.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <header class="header">
+    <div class="top-bar">
+      <div class="container">
+        <div class="top-bar-content">
+          <div class="contact-info">
+            <a href="tel:+15551234567"><i class="fas fa-phone"></i> +1 (555) 123-4567</a>
+            <a href="mailto:support@quickbasket.com"><i class="fas fa-envelope"></i> support@quickbasket.com</a>
+          </div>
+          <div class="top-bar-links">
+            <a href="#" class="track-order">Track Order</a>
+            <a href="mailto:support@quickbasket.com?subject=Help%20with%20my%20order" class="help">Help</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav class="navbar">
+      <div class="container">
+        <div class="nav-content">
+          <div class="logo">
+            <a href="../index.html">
+              <i class="fas fa-shopping-basket"></i>
+              <span>Quick<strong>Basket</strong></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <section class="container" style="padding: 32px 0;">
+      <h2 style="margin-bottom: 16px;">Track your order</h2>
+      <form id="track-form" class="search-form" style="max-width: 520px; display: flex; gap: 8px;">
+        <input type="text" id="order-id" placeholder="Enter Order ID (e.g., QB12345678)" style="flex:1" />
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Track</button>
+      </form>
+      <div id="result" style="margin-top: 24px;"></div>
+    </section>
+  </main>
+
+  <script>
+    function getParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+
+    function formatCurrency(val){
+      const num = typeof val === 'number' ? val : parseFloat(String(val||'0').replace('$',''));
+      if (isNaN(num)) return '$0.00';
+      return `$${num.toFixed(2)}`;
+    }
+
+    function renderOrder(order){
+      const itemsHtml = (order.items||[]).map(it => `
+        <li class="order-item">
+          <span>${it.name} × ${it.quantity}</span>
+          <span>${it.price}</span>
+        </li>
+      `).join('');
+
+      return `
+        <div class="card" style="padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <h3 style="margin:0;">Order <code>${order.id}</code></h3>
+            <span class="badge" style="background:#dc3545;color:#fff;padding:6px 10px;border-radius:999px;">${order.status}</span>
+          </div>
+          <p style="margin:6px 0 12px 0;color:#ccc;">Placed on ${new Date(order.createdAt).toLocaleString()}</p>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+            ${itemsHtml || '<li style="color:#aaa">No items recorded</li>'}
+          </ul>
+          <hr style="border-color:#555;margin:12px 0;" />
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <div style="display:flex;justify-content:space-between;"><span>Subtotal</span><strong>${formatCurrency(order.subtotal)}</strong></div>
+            <div style="display:flex;justify-content:space-between;"><span>Discount</span><strong>-${formatCurrency(order.discount||0)}</strong></div>
+            <div style="display:flex;justify-content:space-between;"><span>Total</span><strong>${formatCurrency(order.total)}</strong></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function lookup(id){
+      const list = JSON.parse(localStorage.getItem('quickbasket_orders')||'[]');
+      return list.find(o => String(o.id).toLowerCase() === String(id).toLowerCase());
+    }
+
+    const form = document.getElementById('track-form');
+    const input = document.getElementById('order-id');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const id = input.value.trim();
+      if(!id){
+        result.innerHTML = '<p style="color:#ccc">Please enter an Order ID.</p>';
+        return;
+      }
+      const order = lookup(id);
+      result.innerHTML = order ? renderOrder(order) : '<p style="color:#ccc">No order found for that ID.</p>';
+    });
+
+    // Auto-populate if id param exists
+    const initialId = getParam('id');
+    if(initialId){
+      input.value = initialId;
+      form.dispatchEvent(new Event('submit'));
+    }
+  </script>
+</body>
+</html>

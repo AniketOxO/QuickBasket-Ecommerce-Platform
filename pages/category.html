@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Category - QuickBasket</title>
+    <meta name="description" content="Browse products by category at QuickBasket. Fresh groceries and daily essentials with quick delivery.">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/wishlist.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .category-banner {
+            /* Full-bleed style like homepage */
+            background: url('../images/hero-landing.png') center/cover no-repeat, var(--primary-dark);
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            min-height: 60vh;
+        }
+        
+        .category-banner::before {
+            /* Dark overlay for readability */
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 35%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.0) 100%);
+        }
+        
+        .category-banner-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .category-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+        
+        .category-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+        }
+        
+        .category-description {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 720px;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+        }
+        
+        .category-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .subcategories {
+            margin-bottom: 50px;
+        }
+        
+        .subcategories-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            text-align: center;
+        }
+        
+        .subcategories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .subcategory-card {
+            background: #2b2b2b; /* dark panel */
+            padding: 25px 20px;
+            border-radius: 12px;
+            text-align: left;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 8px 20px rgba(0,0,0,0.25);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .subcategory-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+            border-color: rgba(255,255,255,0.15);
+        }
+        
+        .subcategory-card.active {
+            border-color: rgba(255,255,255,0.15);
+            background: #2b2b2b;
+        }
+        
+        .subcategory-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.12));
+            border-radius: 0 12px 0 50px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .subcategory-card:hover::before {
+            opacity: 1;
+        }
+        
+        .subcategory-icon {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .subcategory-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            line-height: 1.3;
+        }
+        
+        .subcategory-count {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+        
+        .subcategory-arrow { display: none; }
+        
+        .featured-products {
+            background: var(--background-light);
+            padding: 50px 0;
+            margin-bottom: 50px;
+        }
+        
+        .products-grid {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        #featured-products-grid,
+        #all-products-grid {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .deals-banner {
+            background: url('../images/hero-landing.png') center/cover no-repeat, #e67e22;
+            color: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .deals-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.0) 100%);
+            border-radius: inherit;
+        }
+        
+        .deals-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .deals-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .deals-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+        
+        .brands-section {
+            margin-bottom: 50px;
+        }
+        
+        .brands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        
+        .brand-card {
+            background: #2b2b2b; /* dark panel */
+            padding: 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 6px 20px rgba(0,0,0,0.25);
+        }
+        
+        .brand-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 2px 0 rgba(255,255,255,0.08), 0 10px 24px rgba(0,0,0,0.35);
+            border-color: rgba(255,255,255,0.14);
+        }
+        
+        .brand-logo {
+            width: 72px;
+            height: 72px;
+            background: #1f1f1f;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .brand-logo img {
+            width: 46px;
+            height: 46px;
+            display: block;
+        }
+        
+        .brand-name {
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .category-filters {
+            background: #2b2b2b; /* dark panel */
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 6px 20px rgba(0,0,0,0.25);
+            margin-bottom: 30px;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .filter-tab {
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-light);
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .filter-tab.active {
+            color: var(--primary-color);
+        }
+        
+        .filter-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-color);
+        }
+        
+        .quick-filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .quick-filter {
+            padding: 8px 16px;
+            background: #1f1f1f;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .quick-filter:hover,
+        .quick-filter.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .category-banner {
+                padding: 40px 0;
+                min-height: 50vh;
+            }
+            
+            .category-title {
+                font-size: 2.2rem;
+            }
+            
+            .category-stats {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .subcategories-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .deals-title {
+                font-size: 2rem;
+            }
+            
+            .filter-tabs {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .quick-filters {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .category-title {
+                font-size: 1.8rem;
+            }
+            
+            .subcategories-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .brands-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header (same as other pages) -->
+    <header class="header">
+        <div class="top-bar">
+            <div class="container">
+                <div class="top-bar-content">
+                    <div class="contact-info">
+                        <a href="tel:+15551234567" aria-label="Call support"><i class="fas fa-phone"></i> +1 (555) 123-4567</a>
+                        <a href="mailto:support@quickbasket.com" aria-label="Email support"><i class="fas fa-envelope"></i> support@quickbasket.com</a>
+                    </div>
+                    <div class="top-bar-links">
+                        <a href="track-order.html" class="track-order">Track Order</a>
+                        <a href="mailto:support@quickbasket.com?subject=Help%20with%20my%20order" class="help">Help</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-content">
+                    <div class="logo">
+                        <a href="../index.html">
+                            <i class="fas fa-shopping-basket"></i>
+                            <span>Quick<strong>Basket</strong></span>
+                        </a>
+                    </div>
+                    
+                    <div class="search-bar">
+                        <form class="search-form">
+                            <input type="text" placeholder="Search for products, brands and more..." id="search-input">
+                            <button type="submit" class="search-btn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                        <div class="search-suggestions" id="search-suggestions"></div>
+                    </div>
+                    
+                    <div class="nav-icons">
+                        <div class="location-selector" id="location-selector">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Deliver to</span>
+                            <strong id="delivery-location">New York 10001</strong>
+                        </div>
+                        
+                        <a href="#" class="nav-icon" id="account-btn">
+                            <i class="fas fa-user"></i>
+                            <span>Account</span>
+                        </a>
+                        
+                        <a href="#" class="nav-icon" id="wishlist-btn">
+                            <i class="fas fa-heart"></i>
+                            <span>Wishlist</span>
+                            <span class="wishlist-count" id="wishlist-count">0</span>
+                        </a>
+                        
+                        <a href="#" class="nav-icon cart-icon" id="cart-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Cart</span>
+                            <span class="badge" id="cart-count">0</span>
+                        </a>
+                    </div>
+                    
+                    <div class="mobile-menu-toggle" id="mobile-menu-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="categories-menu">
+            <div class="container">
+                <ul class="categories-list">
+                    <li><a href="category.html?cat=beverages"><i class="fas fa-coffee"></i> Beverages</a></li>
+                    <li><a href="category.html?cat=chocolates"><i class="fas fa-candy-cane"></i> Chocolates & Sweets</a></li>
+                    <li><a href="category.html?cat=dairy"><i class="fas fa-cheese"></i> Dairy & Breads</a></li>
+                    <li><a href="category.html?cat=fruits"><i class="fas fa-apple-alt"></i> Fruits & Veggies</a></li>
+                    <li><a href="category.html?cat=noodles"><i class="fas fa-utensils"></i> Noodles & Pasta</a></li>
+                    <li><a href="category.html?cat=snacks"><i class="fas fa-cookie-bite"></i> Snacks & Namkeen</a></li>
+                    <li><a href="category.html?cat=all" class="view-all">View All Categories</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Category Banner -->
+        <div class="category-banner">
+            <div class="container">
+                <div class="category-banner-content">
+                    <div class="breadcrumb" style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">
+                        <a href="../index.html" style="color: rgba(255,255,255,0.9);">Home</a>
+                        <span><i class="fas fa-chevron-right"></i></span>
+                        <span>Categories</span>
+                        <span><i class="fas fa-chevron-right"></i></span>
+                        <span id="breadcrumb-category">Category</span>
+                    </div>
+                    <div class="category-icon" id="category-icon">
+                        <i class="fas fa-coffee"></i>
+                    </div>
+                    <h1 class="category-title" id="category-title">Beverages</h1>
+                    <p class="category-description" id="category-description">
+                        Refresh yourself with our wide selection of beverages including soft drinks, juices, tea, coffee, and more.
+                    </p>
+                    <div class="category-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="products-count">156</span>
+                            <span class="stat-label">Products</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="brands-count">24</span>
+                            <span class="stat-label">Brands</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">4.8</span>
+                            <span class="stat-label">Avg Rating</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Subcategories -->
+            <section class="subcategories">
+                <h2 class="subcategories-title">Shop by Subcategory</h2>
+                <div class="subcategories-grid" id="subcategories-grid">
+                    <!-- Subcategories will be loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Special Deals Banner -->
+            <div class="deals-banner">
+                <div class="deals-content">
+                    <h2 class="deals-title">Special Deals</h2>
+                    <p class="deals-subtitle">Up to 40% off on selected items in this category</p>
+                    <button class="btn btn-secondary" onclick="window.location.href='products.html?filter=deals'">Shop Deals Now</button>
+                </div>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="category-filters">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="switchTab('all')">All Products</button>
+                    <button class="filter-tab" onclick="switchTab('popular')">Most Popular</button>
+                    <button class="filter-tab" onclick="switchTab('deals')">On Sale</button>
+                    <button class="filter-tab" onclick="switchTab('new')">New Arrivals</button>
+                </div>
+                <div class="quick-filters">
+                    <span class="quick-filter active" onclick="toggleFilter(this, 'all')">All</span>
+                    <span class="quick-filter" onclick="toggleFilter(this, 'price-low')">Under $10</span>
+                    <span class="quick-filter" onclick="toggleFilter(this, 'price-mid')">$10 - $25</span>
+                    <span class="quick-filter" onclick="toggleFilter(this, 'price-high')">Above $25</span>
+                    <span class="quick-filter" onclick="toggleFilter(this, 'rating')">4★ & Above</span>
+                    <span class="quick-filter" onclick="toggleFilter(this, 'organic')">Organic</span>
+                </div>
+            </div>
+
+            <!-- Featured Products -->
+            <section class="featured-products">
+                <div class="section-header">
+                    <h2>Featured Products</h2>
+                    <p>Handpicked items from this category</p>
+                </div>
+                <div class="products-grid" id="featured-products-grid">
+                    <!-- Featured products will be loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Popular Brands -->
+            <section class="brands-section">
+                <div class="section-header">
+                    <h2>Popular Brands</h2>
+                    <p>Top brands in this category</p>
+                </div>
+                <div class="brands-grid" id="brands-grid">
+                    <!-- Brands will be loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- All Products -->
+            <section class="popular-products">
+                <div class="section-header">
+                    <h2>All Products</h2>
+                    <p>Browse all items in this category</p>
+                </div>
+                <div class="products-grid" id="all-products-grid">
+                    <!-- All products will be loaded dynamically -->
+                </div>
+                <div class="view-all-container">
+                    <button class="btn btn-primary" onclick="window.location.href='products.html'">
+                        View All Products
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Include Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-shopping-basket"></i>
+                        <span>Quick<strong>Basket</strong></span>
+                    </div>
+                    <p>Your trusted partner for quick grocery delivery. Fresh products, unbeatable prices, lightning-fast delivery.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="track-order.html">Track Order</a></li>
+                        <li><a href="returns.html">Returns & Refunds</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="category.html?cat=beverages">Beverages</a></li>
+                        <li><a href="category.html?cat=fruits">Fruits & Vegetables</a></li>
+                        <li><a href="javascript:void(0)" onclick="navigateWithTransition('category.html?cat=dairy', 'Loading Dairy & Breads...')">Dairy & Breads</a></li>
+                        <li><a href="javascript:void(0)" onclick="navigateWithTransition('category.html?cat=snacks', 'Loading Snacks & Namkeen...')">Snacks & Namkeen</a></li>
+                        <li><a href="javascript:void(0)" onclick="navigateWithTransition('category.html?cat=all', 'Loading All Categories...')">All Categories</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Customer Service</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                        <p><i class="fas fa-envelope"></i> support@quickbasket.com</p>
+                        <p><i class="fas fa-clock"></i> 24/7 Customer Support</p>
+                        <p><i class="fas fa-map-marker-alt"></i> New York, NY 10001</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2025 QuickBasket. All rights reserved.</p>
+                    <div class="footer-links">
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="cookies.html">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <button class="close-cart" id="close-cart">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be loaded dynamically -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total: $<span id="cart-total">0.00</span></span>
+            </div>
+            <button class="btn btn-primary checkout-btn" onclick="window.location.href='checkout.html'">
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <div class="cart-overlay" id="cart-overlay"></div>
+
+    <!-- Notification Container removed intentionally to disable popups on this page -->
+
+    <!-- JavaScript Files -->
+    <script src="../js/products.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/search.js"></script>
+    <script src="../js/wishlist.js"></script>
+    <script>
+        // Category page specific functions
+        const categoryData = {
+            beverages: {
+                title: 'Beverages',
+                icon: 'fas fa-coffee',
+                description: 'Refresh yourself with our wide selection of beverages including soft drinks, juices, tea, coffee, and more.',
+                subcategories: [
+                    { name: 'Soft Drinks & Sodas', icon: 'fas fa-wine-bottle', count: 45, color: '#e74c3c' },
+                    { name: 'Fresh Juices', icon: 'fas fa-glass-whiskey', count: 38, color: '#f39c12' },
+                    { name: 'Tea & Coffee', icon: 'fas fa-mug-hot', count: 42, color: '#8b4513' },
+                    { name: 'Energy Drinks', icon: 'fas fa-bolt', count: 18, color: '#3498db' },
+                    { name: 'Bottled Water', icon: 'fas fa-tint', count: 13, color: '#2980b9' }
+                ]
+            },
+            chocolates: {
+                title: 'Chocolates & Sweets',
+                icon: 'fas fa-candy-cane',
+                description: 'Indulge in our premium collection of chocolates, candies, and sweet treats for every occasion.',
+                subcategories: [
+                    { name: 'Dark Chocolate Bars', icon: 'fas fa-square-full', count: 28, color: '#2c3e50' },
+                    { name: 'Milk Chocolate', icon: 'fas fa-square', count: 35, color: '#8b4513' },
+                    { name: 'Gummy Candies', icon: 'fas fa-candy-cane', count: 42, color: '#e91e63' },
+                    { name: 'Biscuits & Cookies', icon: 'fas fa-cookie-bite', count: 31, color: '#d2691e' },
+                    { name: 'Cakes & Desserts', icon: 'fas fa-birthday-cake', count: 19, color: '#ff69b4' }
+                ]
+            },
+            dairy: {
+                title: 'Dairy & Breads',
+                icon: 'fas fa-cheese',
+                description: 'Fresh dairy products and bakery items delivered daily to ensure maximum freshness and quality.',
+                subcategories: [
+                    { name: 'Fresh Milk & Cream', icon: 'fas fa-wine-glass', count: 22, color: '#ecf0f1' },
+                    { name: 'Artisan Cheese', icon: 'fas fa-cheese', count: 34, color: '#f1c40f' },
+                    { name: 'Fresh Bread & Rolls', icon: 'fas fa-bread-slice', count: 28, color: '#d2691e' },
+                    { name: 'Butter & Spreads', icon: 'fas fa-square', count: 15, color: '#f39c12' },
+                    { name: 'Yogurt & Probiotics', icon: 'fas fa-ice-cream', count: 26, color: '#e8f5e8' }
+                ]
+            },
+            fruits: {
+                title: 'Fruits & Basic Veggies',
+                icon: 'fas fa-apple-alt',
+                description: 'Farm-fresh fruits and vegetables picked daily to bring you the best quality and taste.',
+                subcategories: [
+                    { name: 'Seasonal Fruits', icon: 'fas fa-apple-alt', count: 45, color: '#e74c3c' },
+                    { name: 'Leafy Greens', icon: 'fas fa-leaf', count: 28, color: '#27ae60' },
+                    { name: 'Root Vegetables', icon: 'fas fa-carrot', count: 32, color: '#e67e22' },
+                    { name: 'Fresh Herbs', icon: 'fas fa-seedling', count: 18, color: '#2ecc71' },
+                    { name: 'Exotic & Tropical', icon: 'fas fa-lemon', count: 22, color: '#f1c40f' }
+                ]
+            },
+            noodles: {
+                title: 'Noodles & Pasta',
+                icon: 'fas fa-utensils',
+                description: 'Quick and delicious meal solutions with our variety of noodles, pasta, and ready-to-eat options.',
+                subcategories: [
+                    { name: 'Instant Cup Noodles', icon: 'fas fa-mug-hot', count: 38, color: '#e74c3c' },
+                    { name: 'Italian Pasta', icon: 'fas fa-utensils', count: 29, color: '#27ae60' },
+                    { name: 'Asian Noodles', icon: 'fas fa-bowl-food', count: 24, color: '#f39c12' },
+                    { name: 'Pasta Sauces', icon: 'fas fa-wine-bottle', count: 31, color: '#c0392b' },
+                    { name: 'Ready-to-Eat Meals', icon: 'fas fa-box-open', count: 16, color: '#8e44ad' }
+                ]
+            },
+            snacks: {
+                title: 'Snacks & Namkeen',
+                icon: 'fas fa-cookie-bite',
+                description: 'Crispy, crunchy, and delicious snacks perfect for any time of the day. From traditional to modern flavors.',
+                subcategories: [
+                    { name: 'Potato Chips', icon: 'fas fa-cookie-bite', count: 42, color: '#f39c12' },
+                    { name: 'Mixed Nuts & Seeds', icon: 'fas fa-seedling', count: 28, color: '#8b4513' },
+                    { name: 'Indian Namkeen', icon: 'fas fa-pepper-hot', count: 35, color: '#e67e22' },
+                    { name: 'Biscuits & Crackers', icon: 'fas fa-cookie', count: 24, color: '#d2691e' },
+                    { name: 'Popcorn & Corn Snacks', icon: 'fas fa-corn', count: 18, color: '#f1c40f' }
+                ]
+            }
+        };
+        
+        function initializePage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('cat') || 'beverages';
+            const deal = urlParams.get('deal');
+            
+            if (categoryData[category]) {
+                loadCategoryData(category);
+            } else {
+                loadCategoryData('beverages');
+            }
+
+            // If a deal flag is present, auto-activate the Deals tab and show a cue
+            if (deal) {
+                const dealsTab = Array.from(document.querySelectorAll('.filter-tab'))
+                    .find(t => t.textContent.trim().toLowerCase().includes('deals'));
+                if (dealsTab) {
+                    dealsTab.click();
+                }
+                try { showNotification(`✓ Showing deal: ${deal}`, 'success', 2500); } catch (e) {}
+            }
+        }
+        
+        function loadCategoryData(category) {
+            const data = categoryData[category];
+            
+            // Update page title and meta
+            document.getElementById('page-title').textContent = `${data.title} - QuickBasket`;
+            document.title = `${data.title} - QuickBasket`;
+            
+            // Update banner content
+            document.getElementById('breadcrumb-category').textContent = data.title;
+            document.getElementById('category-icon').innerHTML = `<i class="${data.icon}"></i>`;
+            document.getElementById('category-title').textContent = data.title;
+            document.getElementById('category-description').textContent = data.description;
+            
+            // Load subcategories
+            loadSubcategories(data.subcategories);
+            
+            // Load products
+            loadFeaturedProducts(category);
+            loadBrands(category);
+            loadAllProducts(category);
+        }
+        
+        function loadSubcategories(subcategories) {
+            const grid = document.getElementById('subcategories-grid');
+            grid.innerHTML = subcategories.map(sub => `
+                <div class="subcategory-card" onclick="filterBySubcategory('${sub.name}')" style="border-left: 4px solid ${sub.color};">
+                    <div class="subcategory-icon" style="color: ${sub.color}; background: ${sub.color}15;">
+                        <i class="${sub.icon}"></i>
+                    </div>
+                    <div class="subcategory-name">${sub.name}</div>
+                    <div class="subcategory-count">${sub.count} items available</div>
+                    <div class="subcategory-arrow">
+                        <i class="fas fa-arrow-right" style="color: ${sub.color};"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function loadFeaturedProducts(category) {
+            const grid = document.getElementById('featured-products-grid');
+            // Generate sample products
+            grid.innerHTML = generateProductCards(6);
+        }
+        
+        // Robust brand logo loading with multi-CDN fallback
+        function brandImgSources(slug) {
+            const domainMap = {
+                cocacola: 'coca-cola.com',
+                pepsi: 'pepsi.com',
+                starbucks: 'starbucks.com',
+                sprite: 'sprite.com',
+                fanta: 'fanta.com',
+                nestle: 'nestle.com'
+            };
+            const domain = domainMap[slug];
+            return [
+                // Local first (recommended for reliability)
+                `../images/brands/${slug}.svg`,
+                `https://cdn.simpleicons.org/${slug}/ffffff.svg`,
+                `https://cdn.simpleicons.org/${slug}/ffffff`,
+                `https://cdn.jsdelivr.net/npm/simple-icons/icons/${slug}.svg`,
+                `https://unpkg.com/simple-icons@latest/icons/${slug}.svg`,
+                `https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/${slug}.svg`,
+                `https://raw.githubusercontent.com/simple-icons/simple-icons/master/icons/${slug}.svg`,
+                `https://simpleicons.org/icons/${slug}.svg`,
+                ...(domain ? [`https://logo.clearbit.com/${domain}`] : [])
+            ];
+        }
+
+        function nextBrandImg(img, slug, name) {
+            try {
+                const sources = brandImgSources(slug);
+                let idx = parseInt(img.dataset.sourceIndex || '0', 10);
+                if (Number.isNaN(idx)) idx = 0;
+                if (idx < sources.length - 1) {
+                    idx++;
+                    img.dataset.sourceIndex = String(idx);
+                    img.src = sources[idx];
+                } else {
+                    img.style.display = 'none';
+                    img.parentElement.textContent = (name && name.charAt) ? name.charAt(0) : '?';
+                }
+            } catch (e) {
+                img.style.display = 'none';
+                img.parentElement.textContent = (name && name.charAt) ? name.charAt(0) : '?';
+            }
+        }
+
+        // Expose to global for inline handlers
+        window.brandImgSources = brandImgSources;
+        window.nextBrandImg = nextBrandImg;
+
+        function loadBrands(category) {
+            const brandsGrid = document.getElementById('brands-grid');
+            const brandsForCategory = getBrandsForCategory(category);
+
+            // Update brands count in banner if present
+            const brandsCountEl = document.getElementById('brands-count');
+            if (brandsCountEl) brandsCountEl.textContent = brandsForCategory.length.toString();
+
+            brandsGrid.innerHTML = brandsForCategory.map(b => {
+                const safeName = b.name.replace(/"/g, '&quot;');
+                const firstSrc = b.slug ? brandImgSources(b.slug)[0] : '';
+                return `
+                <div class="brand-card" role="button" aria-label="Filter by ${safeName}" onclick="filterByBrand('${safeName}')">
+                    <div class="brand-logo">
+                        ${firstSrc ? `<img src="${firstSrc}" data-source-index="0" alt="${safeName} logo" referrerpolicy="no-referrer" crossorigin="anonymous" onerror="nextBrandImg(this, '${b.slug}', '${safeName}')">` : `<span>${safeName.charAt(0)}</span>`}
+                    </div>
+                    <div class="brand-name">${safeName}</div>
+                </div>`;
+            }).join('');
+        }
+
+        function getBrandsForCategory(category) {
+            // Using Simple Icons CDN slugs where available
+            // Fallback: use the same beverage brands for all categories
+            const beverageBrands = [
+                { name: 'Coca-Cola', slug: 'cocacola' },
+                { name: 'Pepsi', slug: 'pepsi' },
+                { name: 'Starbucks', slug: 'starbucks' },
+                { name: 'Sprite', slug: 'sprite' },
+                { name: 'Fanta', slug: 'fanta' },
+                { name: 'Nestlé', slug: 'nestle' }
+            ];
+            return beverageBrands;
+        }
+        
+        function loadAllProducts(category, filterType = 'all') {
+            const grid = document.getElementById('all-products-grid');
+            grid.innerHTML = generateProductCards(8, category, filterType);
+        }
+        
+        function getCurrentCategory() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('cat') || 'beverages';
+        }
+        
+        function generateProductCards(count, category = 'beverages', filterType = 'all') {
+            const categoryProducts = {
+                beverages: [
+                    { id: 'coffee-blend', name: 'Premium Coffee Blend', price: '$12.99', originalPrice: '$15.99', icon: 'fas fa-mug-hot', rating: 4.8, isOrganic: true, category: 'beverages' },
+                    { id: 'orange-juice', name: 'Fresh Orange Juice', price: '$4.99', originalPrice: '$6.99', icon: 'fas fa-glass-whiskey', rating: 4.6, isOrganic: true, category: 'beverages' },
+                    { id: 'energy-drink', name: 'Energy Drink', price: '$3.99', originalPrice: '$4.99', icon: 'fas fa-bolt', rating: 4.2, isOrganic: false, category: 'beverages' },
+                    { id: 'green-tea', name: 'Green Tea', price: '$8.99', originalPrice: '$10.99', icon: 'fas fa-leaf', rating: 4.9, isOrganic: true, category: 'beverages' },
+                    { id: 'coconut-water', name: 'Coconut Water', price: '$5.99', originalPrice: '$7.99', icon: 'fas fa-tint', rating: 4.7, isOrganic: true, category: 'beverages' },
+                    { id: 'cola-drink', name: 'Cola Drink', price: '$2.99', originalPrice: '$3.99', icon: 'fas fa-wine-bottle', rating: 4.0, isOrganic: false, category: 'beverages' },
+                    { id: 'smoothie-mix', name: 'Smoothie Mix', price: '$15.99', originalPrice: '$18.99', icon: 'fas fa-blender', rating: 4.5, isOrganic: true, category: 'beverages' },
+                    { id: 'mineral-water', name: 'Mineral Water', price: '$1.99', originalPrice: '$2.99', icon: 'fas fa-tint', rating: 4.3, isOrganic: false, category: 'beverages' }
+                ],
+                chocolates: [
+                    { id: 'dark-chocolate', name: 'Dark Chocolate Bar', price: '$8.99', originalPrice: '$10.99', icon: 'fas fa-square-full', rating: 4.8, isOrganic: true, category: 'chocolates' },
+                    { id: 'milk-chocolate', name: 'Milk Chocolate', price: '$6.99', originalPrice: '$8.99', icon: 'fas fa-square', rating: 4.6, isOrganic: false, category: 'chocolates' },
+                    { id: 'gummy-bears', name: 'Gummy Bears', price: '$3.99', originalPrice: '$5.99', icon: 'fas fa-candy-cane', rating: 4.4, isOrganic: false, category: 'chocolates' },
+                    { id: 'chocolate-cookies', name: 'Chocolate Cookies', price: '$5.99', originalPrice: '$7.99', icon: 'fas fa-cookie-bite', rating: 4.7, isOrganic: true, category: 'chocolates' },
+                    { id: 'birthday-cake', name: 'Birthday Cake', price: '$24.99', originalPrice: '$29.99', icon: 'fas fa-birthday-cake', rating: 4.9, isOrganic: false, category: 'chocolates' },
+                    { id: 'protein-bar', name: 'Protein Bar', price: '$12.99', originalPrice: '$15.99', icon: 'fas fa-square', rating: 4.3, isOrganic: true, category: 'chocolates' },
+                    { id: 'candy-mix', name: 'Candy Mix', price: '$7.99', originalPrice: '$9.99', icon: 'fas fa-candy-cane', rating: 4.1, isOrganic: false, category: 'chocolates' },
+                    { id: 'chocolate-truffles', name: 'Chocolate Truffles', price: '$18.99', originalPrice: '$22.99', icon: 'fas fa-circle', rating: 4.8, isOrganic: true, category: 'chocolates' }
+                ],
+                dairy: [
+                    { id: 'organic-milk', name: 'Organic Milk', price: '$4.99', originalPrice: '$6.99', icon: 'fas fa-wine-glass', rating: 4.7, isOrganic: true, category: 'dairy' },
+                    { id: 'artisan-cheese', name: 'Artisan Cheese', price: '$12.99', originalPrice: '$15.99', icon: 'fas fa-cheese', rating: 4.8, isOrganic: true, category: 'dairy' },
+                    { id: 'fresh-bread', name: 'Fresh Bread', price: '$3.49', originalPrice: '$4.99', icon: 'fas fa-bread-slice', rating: 4.5, isOrganic: false, category: 'dairy' },
+                    { id: 'greek-yogurt', name: 'Greek Yogurt', price: '$5.99', originalPrice: '$7.99', icon: 'fas fa-ice-cream', rating: 4.6, isOrganic: true, category: 'dairy' },
+                    { id: 'butter', name: 'Butter', price: '$6.99', originalPrice: '$8.99', icon: 'fas fa-square', rating: 4.4, isOrganic: false, category: 'dairy' },
+                    { id: 'cream-cheese', name: 'Cream Cheese', price: '$4.99', originalPrice: '$6.99', icon: 'fas fa-cheese', rating: 4.3, isOrganic: false, category: 'dairy' },
+                    { id: 'sourdough-bread', name: 'Sourdough Bread', price: '$8.99', originalPrice: '$10.99', icon: 'fas fa-bread-slice', rating: 4.9, isOrganic: true, category: 'dairy' },
+                    { name: 'Cottage Cheese', price: '$7.99', originalPrice: '$9.99', icon: 'fas fa-cheese', rating: 4.2, isOrganic: true }
+                ]
+            };
+            
+            // Make products globally accessible for wishlist
+            window.categoryProducts = categoryProducts;
+            
+            const sampleProducts = categoryProducts[category] || categoryProducts.beverages;
+            
+            // Filter products based on filterType
+            let filteredProducts = [...sampleProducts];
+            switch(filterType) {
+                case 'price-low':
+                case 'low-price':
+                    filteredProducts = sampleProducts.filter(p => parseFloat(p.price.replace('$', '')) < 10);
+                    break;
+                case 'price-mid':
+                case 'mid-price':
+                    filteredProducts = sampleProducts.filter(p => {
+                        const price = parseFloat(p.price.replace('$', ''));
+                        return price >= 10 && price <= 25;
+                    });
+                    break;
+                case 'price-high':
+                case 'high-price':
+                    filteredProducts = sampleProducts.filter(p => parseFloat(p.price.replace('$', '')) > 25);
+                    break;
+                case 'rating':
+                case 'high-rating':
+                    filteredProducts = sampleProducts.filter(p => p.rating >= 4.0);
+                    break;
+                case 'organic':
+                    filteredProducts = sampleProducts.filter(p => p.isOrganic);
+                    break;
+                case 'popular':
+                    filteredProducts = sampleProducts.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'deals':
+                    filteredProducts = sampleProducts.filter(p => p.originalPrice);
+                    break;
+                case 'new':
+                    filteredProducts = sampleProducts.slice().reverse(); // Reverse for "new" items
+                    break;
+                default:
+                    filteredProducts = sampleProducts;
+            }
+            
+            // If not enough filtered products, cycle through them
+            const productsToShow = Math.min(count, filteredProducts.length);
+            
+            return Array.from({length: productsToShow}, (_, i) => {
+                const product = filteredProducts[i % filteredProducts.length];
+                const badgeText = product.isOrganic ? 'Organic' : (product.originalPrice ? 'Sale' : 'New');
+                const badgeClass = product.isOrganic ? 'organic-badge' : 'sale-badge';
+                const ratingStars = '★'.repeat(Math.floor(product.rating)) + (product.rating % 1 ? '☆' : '');
+                
+                return `
+                    <div class="product-card" 
+                         data-product-id="${product.id || 'product_' + i}"
+                         data-product-name="${product.name}"
+                         data-product-price="${product.price}"
+                         data-product-image="${product.icon}"
+                         data-category="${'fresh-produce'}"
+                         data-id="${product.id || 'product_' + i}">
+                        <div class="product-image">
+                            <i class="${product.icon}"></i>
+                            <div class="product-badge ${badgeClass}">${badgeText}</div>
+                            <div class="product-actions">
+                                <button class="action-btn wishlist-btn" onclick="addToWishlist('${product.name}')" title="Add to Wishlist">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title product-name">${product.name}</h3>
+                            <div class="product-rating">
+                                <span class="stars">${ratingStars}</span>
+                                <span class="rating-text">${product.rating}</span>
+                            </div>
+                            <p class="product-description">High quality product with great taste and value</p>
+                            <div class="product-price">
+                                <span class="price">${product.price}</span>
+                                ${product.originalPrice ? `<span class="original-price">${product.originalPrice}</span>` : ''}
+                            </div>
+                            <button class="add-to-cart" onclick="addToCart(${i})">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function switchTab(tab) {
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show loading state
+            const allProductsGrid = document.getElementById('all-products-grid');
+            const featuredProductsGrid = document.getElementById('featured-products-grid');
+            
+            allProductsGrid.style.opacity = '0.3';
+            allProductsGrid.style.transform = 'scale(0.98)';
+            featuredProductsGrid.style.opacity = '0.3';
+            featuredProductsGrid.style.transform = 'scale(0.98)';
+            
+            // Filter products based on tab with animation
+            setTimeout(() => {
+                const currentCategory = getCurrentCategory();
+                
+                switch(tab) {
+                    case 'all':
+                        featuredProductsGrid.innerHTML = generateProductCards(6, currentCategory, 'all');
+                        allProductsGrid.innerHTML = generateProductCards(8, currentCategory, 'all');
+                        break;
+                    case 'popular':
+                        featuredProductsGrid.innerHTML = generateProductCards(6, currentCategory, 'popular');
+                        allProductsGrid.innerHTML = generateProductCards(8, currentCategory, 'popular');
+                        break;
+                    case 'deals':
+                        featuredProductsGrid.innerHTML = generateProductCards(6, currentCategory, 'deals');
+                        allProductsGrid.innerHTML = generateProductCards(8, currentCategory, 'deals');
+                        break;
+                    case 'new':
+                        featuredProductsGrid.innerHTML = generateProductCards(6, currentCategory, 'new');
+                        allProductsGrid.innerHTML = generateProductCards(8, currentCategory, 'new');
+                        break;
+                }
+                
+                // Restore opacity with stagger effect
+                setTimeout(() => {
+                    featuredProductsGrid.style.opacity = '1';
+                    featuredProductsGrid.style.transform = 'scale(1)';
+                    
+                    setTimeout(() => {
+                        allProductsGrid.style.opacity = '1';
+                        allProductsGrid.style.transform = 'scale(1)';
+                    }, 100);
+                }, 200);
+            }, 300);
+            
+            // Show notification
+            const tabNames = {
+                'all': 'All Products',
+                'popular': 'Most Popular',
+                'deals': 'On Sale Items',
+                'new': 'New Arrivals'
+            };
+            showNotification(`✓ Showing ${tabNames[tab]}`, 'success', 2000);
+        }
+        
+        function toggleFilter(element, filter) {
+            // Toggle active state
+            if (filter === 'all') {
+                document.querySelectorAll('.quick-filter').forEach(f => f.classList.remove('active'));
+                element.classList.add('active');
+            } else {
+                const currentActive = document.querySelector('.quick-filter.active');
+                if (currentActive) currentActive.classList.remove('active');
+                element.classList.add('active');
+            }
+            
+            // Show loading animation
+            const allProductsGrid = document.getElementById('all-products-grid');
+            const featuredProductsGrid = document.getElementById('featured-products-grid');
+            
+            allProductsGrid.style.transform = 'scale(0.95)';
+            allProductsGrid.style.opacity = '0.3';
+            featuredProductsGrid.style.transform = 'scale(0.95)';
+            featuredProductsGrid.style.opacity = '0.3';
+            
+            // Apply filter with delay for animation
+            setTimeout(() => {
+                applyQuickFilter(filter);
+                
+                // Restore grid appearance with stagger
+                setTimeout(() => {
+                    featuredProductsGrid.style.transform = 'scale(1)';
+                    featuredProductsGrid.style.opacity = '1';
+                    
+                    setTimeout(() => {
+                        allProductsGrid.style.transform = 'scale(1)';
+                        allProductsGrid.style.opacity = '1';
+                    }, 100);
+                }, 200);
+            }, 300);
+            
+            // Show notification
+            const filterNames = {
+                'all': 'All Items',
+                'price-low': 'Under $10',
+                'price-mid': '$10 - $25',
+                'price-high': 'Above $25',
+                'rating': '4★ & Above',
+                'organic': 'Organic Products'
+            };
+            showNotification(`✓ Filtering: ${filterNames[filter]}`, 'success', 2000);
+        }
+        
+        function applyQuickFilter(filter) {
+            const currentCategory = getCurrentCategory();
+            const currentTab = document.querySelector('.filter-tab.active').textContent.toLowerCase().replace(' ', '');
+            
+            // Generate filtered products based on filter type
+            let featuredCount, allCount;
+            switch(filter) {
+                case 'all':
+                    featuredCount = 6;
+                    allCount = 8;
+                    break;
+                case 'price-low':
+                    featuredCount = 4;
+                    allCount = 6;
+                    break;
+                case 'price-mid':
+                    featuredCount = 5;
+                    allCount = 7;
+                    break;
+                case 'price-high':
+                    featuredCount = 3;
+                    allCount = 4;
+                    break;
+                case 'rating':
+                    featuredCount = 4;
+                    allCount = 5;
+                    break;
+                case 'organic':
+                    featuredCount = 3;
+                    allCount = 3;
+                    break;
+                default:
+                    featuredCount = 6;
+                    allCount = 8;
+            }
+            
+            document.getElementById('featured-products-grid').innerHTML = generateProductCards(featuredCount, currentCategory, filter);
+            document.getElementById('all-products-grid').innerHTML = generateProductCards(allCount, currentCategory, filter);
+        }
+        
+        function filterBySubcategory(subcategory) {
+            // Filter products by subcategory
+            showNotification(`✓ Loading ${subcategory} products...`, 'success', 2000);
+            
+            // Update active subcategory
+            document.querySelectorAll('.subcategory-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.target.closest('.subcategory-card').classList.add('active');
+            
+            // Animate and filter products
+            const allProductsGrid = document.getElementById('all-products-grid');
+            const featuredProductsGrid = document.getElementById('featured-products-grid');
+            
+            allProductsGrid.style.opacity = '0.3';
+            allProductsGrid.style.transform = 'scale(0.95)';
+            featuredProductsGrid.style.opacity = '0.3';
+            featuredProductsGrid.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                // Generate products specific to subcategory
+                const currentCategory = getCurrentCategory();
+                featuredProductsGrid.innerHTML = generateProductCards(6, currentCategory, 'all');
+                allProductsGrid.innerHTML = generateProductCards(6, currentCategory, 'all');
+                
+                // Restore appearance with stagger
+                setTimeout(() => {
+                    featuredProductsGrid.style.opacity = '1';
+                    featuredProductsGrid.style.transform = 'scale(1)';
+                    
+                    setTimeout(() => {
+                        allProductsGrid.style.opacity = '1';
+                        allProductsGrid.style.transform = 'scale(1)';
+                    }, 100);
+                }, 200);
+            }, 300);
+        }
+        
+        function filterByBrand(brand) {
+            // Filter products by brand
+            showNotification(`Filtering by brand: ${brand}`, 'info', 2000);
+            console.log('Filtering by brand:', brand);
+        }
+        
+        function showNotification(message, type = 'info', duration = 3000) { /* disabled on category page */ }
+        
+        function viewAllProducts() {
+            window.location.href = 'products.html';
+        }
+        
+        // Initialize page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+    <script src="../js/page-transitions.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/location.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

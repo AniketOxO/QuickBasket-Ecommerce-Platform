@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBasket - Quick Delivery in Minutes</title>
+    <meta name="description" content="QuickBasket - Your trusted online grocery store with quick delivery in minutes. Fresh products, best prices, convenient shopping.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/wishlist.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <h2>QuickBasket</h2>
+        <p>Loading your fresh experience...</p>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="top-bar">
+            <div class="container">
+                <div class="top-bar-content">
+                    <div class="contact-info">
+                        <a href="tel:+15551234567" aria-label="Call support"><i class="fas fa-phone"></i> +1 (555) 123-4567</a>
+                        <a href="mailto:support@quickbasket.com" aria-label="Email support"><i class="fas fa-envelope"></i> support@quickbasket.com</a>
+                    </div>
+                    <div class="top-bar-links">
+                        <a href="pages/track-order.html" class="track-order">Track Order</a>
+                        <a href="mailto:support@quickbasket.com?subject=Help%20with%20my%20order" class="help">Help</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-content">
+                    <!-- Logo -->
+                    <div class="logo">
+                        <a href="index.html">
+                            <i class="fas fa-shopping-basket"></i>
+                            <span>Quick<strong>Basket</strong></span>
+                        </a>
+                    </div>
+                    
+                    <!-- Search Bar -->
+                    <div class="search-bar">
+                        <form class="search-form">
+                            <input type="text" placeholder="Search for products, brands and more..." id="search-input">
+                            <button type="submit" class="search-btn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                        <div class="search-suggestions" id="search-suggestions"></div>
+                    </div>
+                    
+                    <!-- Navigation Icons -->
+                    <div class="nav-icons">
+                        <div class="location-selector" id="location-selector">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Deliver to</span>
+                            <strong id="delivery-location">New York 10001</strong>
+                        </div>
+                        
+                        <a href="#" class="nav-icon" id="account-btn">
+                            <i class="fas fa-user"></i>
+                            <span>Account</span>
+                        </a>
+                        
+                        <a href="#" class="nav-icon" id="wishlist-btn">
+                            <i class="fas fa-heart"></i>
+                            <span>Wishlist</span>
+                            <span class="wishlist-count" id="wishlist-count">0</span>
+                        </a>
+                        
+                        <a href="#" class="nav-icon cart-icon" id="cart-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Cart</span>
+                            <span class="badge" id="cart-count">0</span>
+                        </a>
+                    </div>
+                    
+                    <!-- Mobile Menu Toggle -->
+                    <div class="mobile-menu-toggle" id="mobile-menu-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Categories Menu -->
+        <div class="categories-menu">
+            <div class="container">
+                <ul class="categories-list">
+                    <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=beverages', 'Loading Beverages...')"><i class="fas fa-coffee"></i> Beverages</a></li>
+                    <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=chocolates', 'Loading Chocolates & Sweets...')"><i class="fas fa-candy-cane"></i> Chocolates & Sweets</a></li>
+                    <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=dairy', 'Loading Dairy & Breads...')"><i class="fas fa-cheese"></i> Dairy & Breads</a></li>
+                    <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=fruits', 'Loading Fruits & Veggies...')"><i class="fas fa-apple-alt"></i> Fruits & Veggies</a></li>
+                    <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=noodles', 'Loading Noodles & Pasta...')"><i class="fas fa-utensils"></i> Noodles & Pasta</a></li>
+                    <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=snacks', 'Loading Snacks & Namkeen...')"><i class="fas fa-cookie-bite"></i> Snacks & Namkeen</a></li>
+                    <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=all', 'Loading All Categories...')" class="view-all">View All Categories</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+        <div class="mobile-menu">
+            <div class="mobile-menu-header">
+                <h3>Menu</h3>
+                <button class="close-mobile-menu" id="close-mobile-menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <ul class="mobile-menu-list">
+                <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=beverages', 'Loading Beverages...')">Beverages</a></li>
+                <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=chocolates', 'Loading Chocolates & Sweets...')">Chocolates & Sweets</a></li>
+                <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=dairy', 'Loading Dairy & Breads...')">Dairy & Breads</a></li>
+                <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=fruits', 'Loading Fruits & Veggies...')">Fruits & Veggies</a></li>
+                <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=noodles', 'Loading Noodles & Pasta...')">Noodles & Pasta</a></li>
+                <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=snacks', 'Loading Snacks & Namkeen...')">Snacks & Namkeen</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>Get Quick Get <span class="brand-text">QuickBasket</span></h1>
+                        <h2>DELIVERY IN MINUTES</h2>
+                        <p>Fresh groceries, daily essentials, and more delivered to your doorstep in minutes. Quality guaranteed, prices unbeatable!</p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary" onclick="scrollToCategories()">Shop Now</button>
+                            <button class="btn btn-secondary" onclick="openLocationModal()">Change Location</button>
+                        </div>
+                        <div class="hero-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>Quick Delivery</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Quality Assured</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-tag"></i>
+                                <span>Best Prices</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hero-image">
+                        <div class="delivery-illustration">
+                            <div class="delivery-bike">
+                                <i class="fas fa-motorcycle"></i>
+                            </div>
+                            <div class="delivery-person">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h3>Lightning Fast Delivery</h3>
+                        <p>Get your orders delivered in 10-30 minutes</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3>Fresh & Quality</h3>
+                        <p>Hand-picked fresh products with quality guarantee</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-percent"></i>
+                        </div>
+                        <h3>Best Deals</h3>
+                        <p>Unbeatable prices with daily offers and discounts</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3>24/7 Support</h3>
+                        <p>Round-the-clock customer support for your needs</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="categories-section" id="categories">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Shop by Category</h2>
+                    <p>Discover fresh products across all categories</p>
+                </div>
+                
+                <div class="categories-grid">
+                    <div class="category-card" data-category="beverages">
+                        <div class="category-image">
+                            <i class="fas fa-coffee category-icon"></i>
+                        </div>
+                        <h3>Beverages</h3>
+                        <p>Soft drinks, juices, tea, coffee & more</p>
+                        <button class="btn btn-outline">Shop Now</button>
+                    </div>
+                    
+                    <div class="category-card" data-category="chocolates">
+                        <div class="category-image">
+                            <i class="fas fa-candy-cane category-icon"></i>
+                        </div>
+                        <h3>Chocolates & Sweets</h3>
+                        <p>Premium chocolates, candies & treats</p>
+                        <button class="btn btn-outline">Shop Now</button>
+                    </div>
+                    
+                    <div class="category-card" data-category="dairy">
+                        <div class="category-image">
+                            <i class="fas fa-cheese category-icon"></i>
+                        </div>
+                        <h3>Dairy & Breads</h3>
+                        <p>Fresh milk, bread, cheese & dairy</p>
+                        <button class="btn btn-outline">Shop Now</button>
+                    </div>
+                    
+                    <div class="category-card" data-category="fruits">
+                        <div class="category-image">
+                            <i class="fas fa-apple-alt category-icon"></i>
+                        </div>
+                        <h3>Fruits & Basic Veggies</h3>
+                        <p>Fresh fruits & vegetables daily</p>
+                        <button class="btn btn-outline">Shop Now</button>
+                    </div>
+                    
+                    <div class="category-card" data-category="noodles">
+                        <div class="category-image">
+                            <i class="fas fa-utensils category-icon"></i>
+                        </div>
+                        <h3>Noodles & Pasta's</h3>
+                        <p>Instant noodles, pasta & ready meals</p>
+                        <button class="btn btn-outline">Shop Now</button>
+                    </div>
+                    
+                    <div class="category-card" data-category="snacks">
+                        <div class="category-image">
+                            <i class="fas fa-cookie-bite category-icon"></i>
+                        </div>
+                        <h3>Snacks & Namkeen</h3>
+                        <p>Chips, nuts, crackers & more</p>
+                        <button class="btn btn-outline">Shop Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Products Section -->
+        <section class="popular-products">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Popular Products</h2>
+                    <p>Most loved items by our customers</p>
+                </div>
+                
+                <div class="products-grid" id="popular-products-grid">
+                    <!-- Products will be loaded dynamically -->
+                </div>
+                
+                <div class="view-all-container">
+                    <button class="btn btn-primary" onclick="navigateWithTransition('pages/products.html', 'Loading Popular Products...')">
+                        View All Products
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Special Offers Section -->
+        <section class="special-offers">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Special Offers</h2>
+                    <p>Don't miss out on these amazing deals</p>
+                </div>
+                
+                <div class="offers-grid">
+                    <div class="offer-card big-offer">
+                        <div class="offer-content">
+                            <span class="offer-badge">Limited Time</span>
+                            <h3>50% OFF</h3>
+                            <p>On Fresh Fruits & Vegetables</p>
+                            <button class="btn btn-primary" data-offer="fruits50" data-category="fruits">Shop Now</button>
+                        </div>
+                    </div>
+                    
+                    <div class="offer-card">
+                        <div class="offer-content">
+                            <span class="offer-badge">New User</span>
+                            <h3>Free Delivery</h3>
+                            <p>On orders above $25</p>
+                            <button class="btn btn-outline" data-offer="free-delivery">Claim Now</button>
+                        </div>
+                    </div>
+                    
+                    <div class="offer-card">
+                        <div class="offer-content">
+                            <span class="offer-badge">Weekend Deal</span>
+                            <h3>Buy 2 Get 1</h3>
+                            <p>On selected snacks</p>
+                            <button class="btn btn-outline" data-offer="bogo" data-category="snacks">Shop Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="newsletter-section">
+            <div class="container">
+                <div class="newsletter-content">
+                    <div class="newsletter-text">
+                        <h2>Stay Updated</h2>
+                        <p>Subscribe to our newsletter for exclusive deals and updates</p>
+                    </div>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Enter your email address" required>
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Authentication Modals -->
+    <div class="auth-modal" id="auth-modal">
+        <div class="auth-modal-content">
+            <div class="auth-modal-header">
+                <h3 id="auth-modal-title">Welcome to QuickBasket</h3>
+                <button class="auth-modal-close" id="auth-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="auth-form" id="login-form">
+                <div class="auth-form-header">
+                    <h4>Sign In to Your Account</h4>
+                    <p>Enter your credentials to continue shopping</p>
+                </div>
+                
+                <form class="auth-form-body" id="login-form-element">
+                    <div class="auth-input-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" class="auth-input" placeholder="Enter your email" required>
+                        <span class="auth-error" id="login-email-error"></span>
+                    </div>
+                    
+                    <div class="auth-input-group">
+                        <label for="login-password">Password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="login-password" class="auth-input" placeholder="Enter your password" required>
+                            <button type="button" class="password-toggle" data-target="login-password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="auth-error" id="login-password-error"></span>
+                    </div>
+                    
+                    <div class="auth-options">
+                        <label class="remember-checkbox">
+                            <input type="checkbox" id="remember-me">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn auth-btn-primary" id="login-submit">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign In
+                    </button>
+                </form>
+                
+                <div class="auth-divider">
+                    <span>Don't have an account?</span>
+                </div>
+                
+                <button class="auth-btn auth-btn-secondary" id="show-register">
+                    <i class="fas fa-user-plus"></i>
+                    Create New Account
+                </button>
+            </div>
+            
+            <!-- Registration Form -->
+            <div class="auth-form" id="register-form" style="display: none;">
+                <div class="auth-form-header">
+                    <h4>Create Your Account</h4>
+                    <p>Join QuickBasket for faster checkout and exclusive offers</p>
+                </div>
+                
+                <form class="auth-form-body" id="register-form-element">
+                    <div class="auth-input-row">
+                        <div class="auth-input-group">
+                            <label for="register-firstname">First Name</label>
+                            <input type="text" id="register-firstname" class="auth-input" placeholder="First name" required>
+                            <span class="auth-error" id="register-firstname-error"></span>
+                        </div>
+                        <div class="auth-input-group">
+                            <label for="register-lastname">Last Name</label>
+                            <input type="text" id="register-lastname" class="auth-input" placeholder="Last name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-input-group">
+                        <label for="register-email">Email Address</label>
+                        <input type="email" id="register-email" class="auth-input" placeholder="Enter your email" required>
+                        <span class="auth-error" id="register-email-error"></span>
+                    </div>
+                    
+                    <div class="auth-input-group">
+                        <label for="register-phone">Phone Number</label>
+                        <input type="tel" id="register-phone" class="auth-input" placeholder="Enter your phone number">
+                    </div>
+                    
+                    <div class="auth-input-group">
+                        <label for="register-password">Password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="register-password" class="auth-input" placeholder="Create a password" required>
+                            <button type="button" class="password-toggle" data-target="register-password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength" id="password-strength">
+                            <div class="strength-bar">
+                                <div class="strength-fill"></div>
+                            </div>
+                            <span class="strength-text">Password strength</span>
+                        </div>
+                        <span class="auth-error" id="register-password-error"></span>
+                    </div>
+                    
+                    <div class="auth-input-group">
+                        <label for="register-confirm-password">Confirm Password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="register-confirm-password" class="auth-input" placeholder="Confirm your password" required>
+                            <button type="button" class="password-toggle" data-target="register-confirm-password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="auth-error" id="register-confirm-password-error"></span>
+                    </div>
+                    
+                    <div class="auth-checkbox-group">
+                        <label class="auth-checkbox">
+                            <input type="checkbox" id="terms-agree" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#" class="auth-link">Terms of Service</a> and <a href="#" class="auth-link">Privacy Policy</a>
+                        </label>
+                        
+                        <label class="auth-checkbox">
+                            <input type="checkbox" id="newsletter-subscribe">
+                            <span class="checkmark"></span>
+                            Subscribe to our newsletter for offers and updates
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn auth-btn-primary" id="register-submit">
+                        <i class="fas fa-user-plus"></i>
+                        Create Account
+                    </button>
+                </form>
+                
+                <div class="auth-divider">
+                    <span>Already have an account?</span>
+                </div>
+                
+                <button class="auth-btn auth-btn-secondary" id="show-login">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In Instead
+                </button>
+            </div>
+            
+            <!-- User Account Dashboard -->
+            <div class="auth-form" id="account-dashboard" style="display: none;">
+                <div class="account-header">
+                    <div class="account-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="account-info">
+                        <h4 id="account-name">Welcome Back!</h4>
+                        <p id="account-email">your.email@example.com</p>
+                    </div>
+                </div>
+                
+                <div class="account-menu">
+                    <a href="#" class="account-menu-item" id="view-profile">
+                        <i class="fas fa-user"></i>
+                        <span>My Profile</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                    <a href="#" class="account-menu-item" id="view-orders">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>My Orders</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                    <a href="#" class="account-menu-item" id="view-wishlist">
+                        <i class="fas fa-heart"></i>
+                        <span>My Wishlist</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                    <a href="#" class="account-menu-item" id="view-addresses">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Saved Addresses</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                    <a href="#" class="account-menu-item" id="view-settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Account Settings</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                
+                <div class="account-actions">
+                    <button class="auth-btn auth-btn-secondary" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+
+            <!-- Edit Profile Form -->
+            <div class="auth-form" id="edit-profile-form" style="display: none;">
+                <div class="auth-form-header">
+                    <h4>Edit Your Details</h4>
+                    <p>Update your name, email, or phone number</p>
+                </div>
+
+                <form class="auth-form-body" id="edit-profile-form-element">
+                    <div class="auth-input-row">
+                        <div class="auth-input-group">
+                            <label for="edit-firstname">First Name</label>
+                            <input type="text" id="edit-firstname" class="auth-input" placeholder="First name" required>
+                        </div>
+                        <div class="auth-input-group">
+                            <label for="edit-lastname">Last Name</label>
+                            <input type="text" id="edit-lastname" class="auth-input" placeholder="Last name" required>
+                        </div>
+                    </div>
+
+                    <div class="auth-input-group">
+                        <label for="edit-email">Email Address</label>
+                        <input type="email" id="edit-email" class="auth-input" placeholder="Enter your email" required>
+                        <span class="auth-error" id="edit-email-error"></span>
+                    </div>
+
+                    <div class="auth-input-group">
+                        <label for="edit-phone">Phone Number</label>
+                        <input type="tel" id="edit-phone" class="auth-input" placeholder="Enter your phone number">
+                    </div>
+
+                    <button type="submit" class="auth-btn auth-btn-primary" id="edit-profile-save">
+                        <i class="fas fa-save"></i>
+                        Save Changes
+                    </button>
+                </form>
+
+                <div class="auth-divider"><span>or</span></div>
+                <button class="auth-btn auth-btn-secondary" id="edit-profile-cancel">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Account
+                </button>
+            </div>
+
+            <!-- My Orders View -->
+            <div class="auth-form" id="orders-view" style="display: none;">
+                <div class="auth-form-header">
+                    <h4>My Orders</h4>
+                    <p>View your recent orders and track their status</p>
+                </div>
+                <div class="auth-form-body">
+                    <div id="orders-list">
+                        <!-- Orders will be rendered here -->
+                    </div>
+                </div>
+                <div class="auth-divider"><span></span></div>
+                <button class="auth-btn auth-btn-secondary" id="orders-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Account
+                </button>
+            </div>
+
+            <!-- Saved Addresses View -->
+            <div class="auth-form" id="addresses-view" style="display: none;">
+                <div class="auth-form-header">
+                    <h4>Saved Addresses</h4>
+                    <p>Manage your delivery addresses</p>
+                </div>
+                <div class="auth-form-body">
+                    <form id="add-address-form" style="margin-bottom: 12px; display: grid; grid-template-columns: 1fr 2fr auto; gap: 8px; align-items: end;">
+                        <div class="auth-input-group" style="margin:0;">
+                            <label for="address-label">Label</label>
+                            <input type="text" id="address-label" class="auth-input" placeholder="Home / Office" />
+                        </div>
+                        <div class="auth-input-group" style="margin:0;">
+                            <label for="address-line">Address</label>
+                            <input type="text" id="address-line" class="auth-input" placeholder="Street, City, ZIP" />
+                        </div>
+                        <button type="submit" class="auth-btn auth-btn-primary"><i class="fas fa-plus"></i> Add</button>
+                    </form>
+                    <div class="address-list" id="address-list">
+                        <!-- Address items will be rendered here -->
+                    </div>
+                </div>
+                <div class="auth-divider"><span></span></div>
+                <button class="auth-btn auth-btn-secondary" id="addresses-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Account
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Selection Modal -->
+    <div class="location-modal" id="location-modal">
+        <div class="location-modal-content">
+            <div class="location-modal-header">
+                <h3>Choose Your Delivery Location</h3>
+                <button class="location-modal-close" id="location-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="location-modal-body">
+                <div class="location-input-group">
+                    <label for="location-search">Enter your address, zip code, or city</label>
+                    <input type="text" id="location-search" class="location-input" 
+                           placeholder="e.g., New York, NY 10001 or 123 Main St">
+                    <div class="location-suggestions" id="location-suggestions"></div>
+                </div>
+                
+                <div class="delivery-status" id="delivery-status" style="display: none;"></div>
+                
+                <div class="location-actions">
+                    <button class="location-btn location-btn-secondary" id="location-cancel">Cancel</button>
+                    <button class="location-btn location-btn-secondary" id="location-use-current">
+                        <i class="fas fa-location-arrow"></i>
+                        Use current location
+                    </button>
+                    <button class="location-btn location-btn-primary" id="location-confirm">Confirm Location</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-shopping-basket"></i>
+                        <span>Quick<strong>Basket</strong></span>
+                    </div>
+                    <p>Your trusted partner for quick grocery delivery. Fresh products, unbeatable prices, lightning-fast delivery.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="pages/about.html">About Us</a></li>
+                        <li><a href="pages/contact.html">Contact Us</a></li>
+                        <li><a href="pages/faq.html">FAQ</a></li>
+                        <li><a href="pages/track-order.html">Track Order</a></li>
+                        <li><a href="pages/returns.html">Returns & Refunds</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=beverages', 'Loading Beverages...')">Beverages</a></li>
+                        <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=fruits', 'Loading Fruits & Vegetables...')">Fruits & Vegetables</a></li>
+                        <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=dairy', 'Loading Dairy & Breads...')">Dairy & Breads</a></li>
+                        <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=snacks', 'Loading Snacks & Namkeen...')">Snacks & Namkeen</a></li>
+                        <li><a href="javascript:void(0)" onclick="navigateWithTransition('pages/category.html?cat=all', 'Loading All Categories...')">All Categories</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Customer Service</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                        <p><i class="fas fa-envelope"></i> support@quickbasket.com</p>
+                        <p><i class="fas fa-clock"></i> 24/7 Customer Support</p>
+                        <p><i class="fas fa-map-marker-alt"></i> New York, NY 10001</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2025 QuickBasket. All rights reserved.</p>
+                    <div class="footer-links">
+                        <a href="pages/privacy.html">Privacy Policy</a>
+                        <a href="pages/terms.html">Terms of Service</a>
+                        <a href="pages/cookies.html">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <button class="close-cart" id="close-cart">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be loaded dynamically -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total: $<span id="cart-total">0.00</span></span>
+            </div>
+            <button class="btn btn-primary checkout-btn" onclick="window.location.href='pages/checkout.html'">
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+
+    <!-- Removed legacy duplicate Location Modal with conflicting IDs -->
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notification-container"></div>
+
+    <!-- JavaScript Files -->
+    <script src="js/page-transitions.js"></script>
+    <script src="js/section-transitions.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/location.js"></script>
+    <script src="js/main.js"></script>
+    
+    <!-- Page Load Handler -->
+    <script>
+        // Hide loading screen and show content when page is fully loaded
+        window.addEventListener('DOMContentLoaded', function() {
+            // Small delay to ensure all resources are loaded
+            setTimeout(function() {
+                const loadingScreen = document.getElementById('loading-screen');
+                
+                if (loadingScreen) {
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }
+                
+                // Show main content
+                document.body.style.overflow = 'auto';
+            }, 1000); // 1 second delay to show the loading animation
+        });
+        
+        // Fallback: Hide loading screen after 3 seconds regardless
+        setTimeout(function() {
+            const loadingScreen = document.getElementById('loading-screen');
+            
+            if (loadingScreen && loadingScreen.style.display !== 'none') {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+                document.body.style.overflow = 'auto';
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
